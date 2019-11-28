@@ -79,11 +79,13 @@ def main(args):
 
             outputs = nn(images)
             probs = torch.nn.functional.softmax(outputs, dim=1).data.cpu().numpy()
-
             for tile, prob in zip(tiles, probs):
-                x, y, z = list(map(int, tile))
-                mask = np.around(prob[1:, :, :]).astype(np.uint8).squeeze()
-                tile_label_to_file(args.out, mercantile.Tile(x, y, z), palette, mask)
+                tile_label_to_file(args.out, mercantile.Tile(x, y, z), palette, probs)
+
+    #        for tile, prob in zip(tiles, probs):
+     #           x, y, z = list(map(int, tile))
+     #           mask = np.around(prob[1:, :, :]).astype(np.uint8).squeeze()
+       #         tile_label_to_file(args.out, mercantile.Tile(x, y, z), palette, mask)
 
     if not args.no_web_ui:
         template = "leaflet.html" if not args.web_ui_template else args.web_ui_template
